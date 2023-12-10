@@ -1,0 +1,1 @@
+kube_configmap_annotations{namespace="kube-system",configmap="kube-dns"} 1

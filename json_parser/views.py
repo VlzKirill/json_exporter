@@ -36,12 +36,31 @@ def process_folder(folder_path):
 
                 Benchmark.objects.create(version=version, name=benchmark_name, cpu_time=cpu_time)
 
-def index(request):
-    versions_folder = '/path/to/your/versions/folder/'
-    folders = [f.path for f in os.scandir(versions_folder) if f.is_dir()]
 
-    for folder in folders:
-        process_folder(folder)
+def index(request):
+    base_folder = 'C:\\Users\\Пользователь\\Desktop\\benchmarks'
+
+    # Получите все поддиректории
+    version_folders = [f.path for f in os.scandir(base_folder) if f.is_dir()]
+
+    # Инициализируйте переменные для хранения информации о самой последней версии
+    max_version_name = None
+    max_last_digit = float('-inf')
+
+    # Найдите версию с самым большим last_digit
+    for version_folder in version_folders:
+        version_name = extract_version_name(version_folder)
+        last_digit = extract_last_digit(version_name)
+
+        if last_digit > max_last_digit:
+            max_last_digit = last_digit
+            max_version_name = version_folder
+
+    # Очистите базу данных перед обработкой новой версии
+    Benchmark.objects.all().delete()
+
+    # Обработайте только выбранную версию
+    process_folder(max_version_name)
 
     benchmarks = Benchmark.objects.all()
 
