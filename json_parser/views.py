@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -34,8 +35,13 @@ def process_folder(folder_path):
                 benchmark_name = benchmark_data.get('name', '')
                 cpu_time = benchmark_data.get('cpu_time', 0.0)
 
-                Benchmark.objects.create(version=version, name=benchmark_name, cpu_time=cpu_time)
+                # Преобразуйте benchmark_name в нижний регистр и замените пробелы на нижние подчеркивания
+                benchmark_name = benchmark_name.lower().replace(' ', '_')
 
+                # Оставьте только те benchmark_name, у которых есть /real_time_median на конце
+                if benchmark_name.endswith('/real_time_median'):
+                    benchmark_name = benchmark_name.replace('/real_time_median', '').strip()
+                    Benchmark.objects.create(version=version, name=benchmark_name, cpu_time=cpu_time)
 
 def index(request):
     base_folder = 'C:\\Users\\Пользователь\\Desktop\\benchmarks'
@@ -64,5 +70,10 @@ def index(request):
 
     benchmarks = Benchmark.objects.all()
 
-    context = {'benchmarks': benchmarks}
-    return render(request, 'index.html', context)
+    #context = {'benchmarks': benchmarks}
+    #return render(request, 'index.html', context)
+    response_content = ''
+    for benchmark in benchmarks:
+        response_content += f'{benchmark.name}{{version="{benchmark.version.name}"}} {benchmark.cpu_time}\n'
+
+    return HttpResponse(response_content, content_type='text/plain')

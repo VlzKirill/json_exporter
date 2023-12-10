@@ -1,28 +1,4 @@
-<!-- templates/index.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Benchmarks</title>
-</head>
-<body>
-    <h1>Benchmarks</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Version</th>
-                <th>Benchmark Name</th>
-                <th>CPU Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for benchmark in benchmarks %}
-                <tr>
-                    <td>{{ benchmark.version.name }}</td>
-                    <td>{{ benchmark.name }}</td>
-                    <td>{{ benchmark.cpu_time }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+#benchmarks json prometheus exporter for crypto/libacm project
+{% for benchmark in benchmarks %}
+  <br>{{ benchmark.name }}{version="{{ benchmark.version.name }}"} {{ benchmark.cpu_time }}
+{% endfor %}
