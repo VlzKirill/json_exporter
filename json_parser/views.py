@@ -44,7 +44,7 @@ def process_folder(folder_path):
                     Benchmark.objects.create(version=version, name=benchmark_name, cpu_time=cpu_time)
 
 def index(request):
-    base_folder = 'C:\\Users\\Пользователь\\Desktop\\benchmarks'
+    base_folder = '/benchmarks'
 
     # Получите все поддиректории
     version_folders = [f.path for f in os.scandir(base_folder) if f.is_dir()]
