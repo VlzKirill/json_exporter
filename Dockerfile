@@ -13,10 +13,10 @@ COPY . /app/
 
 # Выполняем миграции и собираем статические файлы
 RUN python manage.py migrate
-RUN python manage.py collectstatic --noinput
+#RUN python manage.py collectstatic --noinput
 
 # Открываем порт, на котором будет работать приложение
 EXPOSE 8000
 
 # Команда для запуска приложения при старте контейнера
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "json_exporter.wsgi:application"]
+CMD ["python", "manage.py", "runserver"]
