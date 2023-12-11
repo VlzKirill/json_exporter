@@ -33,14 +33,14 @@ def process_folder(folder_path):
 
             for benchmark_data in benchmarks:
                 benchmark_name = benchmark_data.get('name', '')
-                cpu_time = benchmark_data.get('cpu_time', 0.0)
+                cpu_time = benchmark_data.get('bytes_per_second', 0.0)
 
                 # Преобразуйте benchmark_name в нижний регистр и замените пробелы на нижние подчеркивания
                 benchmark_name = benchmark_name.lower().replace(' ', '_')
 
                 # Оставьте только те benchmark_name, у которых есть /real_time_median на конце
-                if benchmark_name.endswith('/real_time_median'):
-                    benchmark_name = benchmark_name.replace('/real_time_median', '').strip()
+                if benchmark_name.endswith('/real_time_mean'):
+                    benchmark_name = benchmark_name.replace('/real_time_mean', '').strip()
                     Benchmark.objects.create(version=version, name=benchmark_name, cpu_time=cpu_time)
 
 def index(request):
