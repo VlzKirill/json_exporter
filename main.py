@@ -9,15 +9,19 @@ app = Flask(__name__)
 
 benchmarks = process_folder()[0]
 build_number = process_folder()[2]
-
+version = process_folder()[1]
 
 class CustomCollector(Collector):
 
     def collect(self):
-        for key, value in benchmarks.items():
-            yield GaugeMetricFamily(key, f'Algorithm {key} bytes per second', value=value)
-        yield GaugeMetricFamily("build_number", "Build number of libacm benchmarks", value=build_number)
-
+        metric = GaugeMetricFamily(
+            'benchmark',
+            'some benchmark',
+            labels=["build_number", "name", "version"])
+        for bench, value in benchmarks.items():
+            label_values = [str(build_number), str(bench), str(version)]
+            metric.add_metric(label_values, value)
+        yield metric
 
 REGISTRY.register(CustomCollector())
 
