@@ -1,3 +1,8 @@
-подмонтировать папку с json в /benchmarks
-http сервер запускается на 8000
-формат вывода для prometheus
+1. СОздать виртуальное окружение
+python -m venv json_exporter_env
+2. Активировать виртуальое окружение - cmd.exe
+.\json_exporter_env\Scripts\activate.bat
+3. Установить pip install prometheus-client flask uwsgi
+4. flask --app main.py run
+Запуск на wsgi:
+uwsgi --http 0.0.0.0:5000 --wsgi-file main.py --callable app
